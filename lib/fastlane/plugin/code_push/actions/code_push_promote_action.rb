@@ -3,6 +3,11 @@ module Fastlane
     class CodePushPromoteAction < Action
       def self.run(params)
         command = "appcenter codepush promote -a #{params[:app_name]} -s #{params[:from]} -d #{params[:to]}"
+        
+        if params[:token] && params[:token].strip != ""
+          command += " --token #{params[:token]}"
+        end
+
         if params[:dry_run]
           UI.message("Dry run!".red + " Would have run: " + command + "\n")
         else
@@ -42,6 +47,10 @@ module Fastlane
                                        optional: true,
                                        default_value: "Production",
                                        description: "destDeploymentName"),
+          FastlaneCore::ConfigItem.new(key: :token,
+                                      is_string: true,
+                                      optional: true,
+                                      description: "Specifies API token to use for this action"),
           FastlaneCore::ConfigItem.new(key: :dry_run,
                                        description: "Print the command that would be run, and don't run it",
                                        is_string: false,

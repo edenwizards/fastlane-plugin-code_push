@@ -26,6 +26,9 @@ module Fastlane
           if params[:sourcemap_output]
             command += "-s #{params[:sourcemap_output]} "
           end
+          if params[:token] && params[:token].strip != ""
+            command += " --token #{params[:token]}"
+          end
           if params[:dry_run]
             UI.message("Dry run!".red + " Would have run: " + command + "\n")
           else
@@ -107,7 +110,11 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :sourcemap_output,
                                       is_string: true,
                                       optional: true,
-                                      description: "Specifies path to write sourcemap to")
+                                      description: "Specifies path to write sourcemap to"),
+          FastlaneCore::ConfigItem.new(key: :token,
+                                      is_string: true,
+                                      optional: true,
+                                      description: "Specifies API token to use for this action"),
         ]
       end
 
